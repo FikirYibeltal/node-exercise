@@ -1,7 +1,7 @@
 const express=require('express');
 const hbs=require('hbs');
 const fs=require('fs');
-
+const port=process.env.PORT || 3003;
 let app=express();
 
 hbs.registerPartials(__dirname+ '/views/partial');
@@ -10,9 +10,14 @@ app.use(express.static(__dirname+ '/public'));
 hbs.registerHelper('getCurrentyear',()=>{
     return new Date().getFullYear();
 });
+
+
+
 hbs.registerHelper('capitalize',(text)=>{
     return text.toUpperCase();
 });
+
+
 app.use((req,res,next)=>{
     let now=new Date().toString();
     let logFile=`${now} : ${req.method} ${req.url}`;
@@ -20,9 +25,13 @@ app.use((req,res,next)=>{
     fs.appendFileSync('file.log',logFile+'\n');
     next();
 });
-app.use((req,res,next)=>{
-    res.render('maintenance.hbs');
-});
+
+
+// app.use((req,res,next)=>{
+//     res.render('maintenance.hbs');
+// });
+
+
 app.get('/',(req,res)=>{
     //res.send('<h1>hello express</h1>');
     // res.send({
@@ -42,6 +51,6 @@ app.get('/about',(req,res)=>{
         title:'about page'
     });
 });
-app.listen(3002,()=>{
-    console.log('server is running on port 3002');
+app.listen(port,()=>{
+    console.log(`server is running on port ${port}`);
 });
